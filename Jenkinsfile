@@ -2,8 +2,8 @@ pipeline {
     agent {
         docker {
             image 'bash:latest'
-            // Le socket Docker est déjà monté dans votre Jenkins controller
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
+            // Monter le projet depuis le volume Jenkins
+            args '-v /workspace/03-jenkins-docker:/project'
         }
     }
     
@@ -19,6 +19,7 @@ pipeline {
                 echo "Nombre de termes Fibonacci: ${params.N}"
                 sh 'echo "Agent Docker: $(hostname)"'
                 sh 'echo "Bash version: $(bash --version | head -n1)"'
+                sh 'ls -la /project/scripts/ || echo "Répertoire /project/scripts non trouvé"'
             }
         }
         
@@ -26,11 +27,13 @@ pipeline {
             steps {
                 echo "Vérification et préparation du script fibonacci.sh"
                 sh '''
-                    if [ -f "${WORKSPACE}/scripts/fibonacci.sh" ]; then
-                        echo "✓ Script fibonacci.sh trouvé dans scripts/"
-                        chmod +x "${WORKSPACE}/scripts/fibonacci.sh"
+                    if [ -f "/project/scripts/fibonacci.sh" ]; then
+                        echo "✓ Script fibonacci.sh trouvé"
+                        chmod +x /project/scripts/fibonacci.sh
                     else
-                        echo "✗ ERREUR: fibonacci.sh non trouvé dans ${WORKSPACE}/scripts/"
+                        echo "✗ ERREUR: fibonacci.sh non trouvé"
+                        echo "Contenu de /project:"
+                        ls -la /project/ || echo "Répertoire /project non accessible"
                         exit 1
                     fi
                 '''
@@ -41,7 +44,7 @@ pipeline {
             steps {
                 script {
                     echo "=== Début du calcul de Fibonacci ==="
-                    sh "${WORKSPACE}/scripts/fibonacci.sh ${params.N}"
+                    sh "/project/scripts/fibonacci.sh ${params.N}"
                     echo "=== Fin du calcul ==="
                 }
             }
