@@ -51,7 +51,7 @@ pipeline {
             steps {
                 script {
                     echo "=== Début du calcul de Fibonacci ==="
-                    sh "./scripts/fibonacci.sh ${params.N}"
+                    sh "bash scripts/fibonacci.sh ${params.N}"
                     echo "=== Fin du calcul ==="
                 }
             }
