@@ -49,11 +49,9 @@ pipeline {
         
         stage('Exécution Fibonacci') {
             steps {
-                script {
-                    echo "=== Début du calcul de Fibonacci ==="
-                    sh "bash scripts/fibonacci.sh ${params.N}"
-                    echo "=== Fin du calcul ==="
-                }
+                echo "=== Début du calcul de Fibonacci ==="
+                sh "bash scripts/fibonacci.sh ${params.N}"
+                echo "=== Fin du calcul ==="
             }
         }
     }
