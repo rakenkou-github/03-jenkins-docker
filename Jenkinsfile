@@ -11,6 +11,13 @@ pipeline {
     }
     
     stages {
+        stage('Checkout') {
+            steps {
+                echo "=== Récupération du code depuis Git ==="
+                checkout scm
+            }
+        }
+        
         stage('Vérification de l\'environnement') {
             steps {
                 echo "=== Informations de l'environnement ==="
