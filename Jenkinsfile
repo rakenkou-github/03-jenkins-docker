@@ -2,8 +2,7 @@ pipeline {
     agent {
         docker {
             image 'bash:latest'
-            // Monter le projet depuis le volume Jenkins
-            args '-v /workspace/03-jenkins-docker:/project'
+            // Pas besoin de monter de volume, Jenkins gère automatiquement le workspace
         }
     }
     
@@ -19,7 +18,8 @@ pipeline {
                 echo "Nombre de termes Fibonacci: ${params.N}"
                 sh 'echo "Agent Docker: $(hostname)"'
                 sh 'echo "Bash version: $(bash --version | head -n1)"'
-                sh 'ls -la /project/scripts/ || echo "Répertoire /project/scripts non trouvé"'
+                sh 'pwd'
+                sh 'ls -la'
             }
         }
         
@@ -27,13 +27,13 @@ pipeline {
             steps {
                 echo "Vérification et préparation du script fibonacci.sh"
                 sh '''
-                    if [ -f "/project/scripts/fibonacci.sh" ]; then
+                    if [ -f "scripts/fibonacci.sh" ]; then
                         echo "✓ Script fibonacci.sh trouvé"
-                        chmod +x /project/scripts/fibonacci.sh
+                        chmod +x scripts/fibonacci.sh
                     else
                         echo "✗ ERREUR: fibonacci.sh non trouvé"
-                        echo "Contenu de /project:"
-                        ls -la /project/ || echo "Répertoire /project non accessible"
+                        echo "Contenu du workspace:"
+                        ls -laR
                         exit 1
                     fi
                 '''
@@ -44,7 +44,7 @@ pipeline {
             steps {
                 script {
                     echo "=== Début du calcul de Fibonacci ==="
-                    sh "/project/scripts/fibonacci.sh ${params.N}"
+                    sh "./scripts/fibonacci.sh ${params.N}"
                     echo "=== Fin du calcul ==="
                 }
             }
