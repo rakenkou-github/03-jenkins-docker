@@ -12,9 +12,11 @@ Ce projet exécute un script shell calculant la suite de Fibonacci sur un agent 
 
 ```
 03-jenkins-docker/
-└── scripts/
-    ├── fibonacci.sh    # Script de calcul de Fibonacci
-    └── Jenkinsfile     # Pipeline Jenkins
+├── Jenkinsfile         # Pipeline Jenkins (à la racine)
+├── scripts/
+│   └── fibonacci.sh    # Script de calcul de Fibonacci
+├── README.md
+└── QUICK-START.md
 ```
 
 ## Intégration avec votre Jenkins existant
@@ -53,8 +55,8 @@ docker-compose restart jenkins
 #### Option B : Pipeline depuis SCM (si vous utilisez Git)
    - **Pipeline** → **Definition** : `Pipeline script from SCM`
    - **SCM** : Git
-   - **Repository URL** : Votre URL Git
-   - **Script Path** : `scripts/Jenkinsfile`
+   - **Repository URL** : `https://github.com/rakenkou-github/03-jenkins-docker.git`
+   - **Script Path** : `Jenkinsfile`
 
 ### 4. Configuration des Paramètres
 

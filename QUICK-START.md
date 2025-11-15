@@ -49,11 +49,11 @@ pipeline {
             steps {
                 echo "Vérification et préparation du script fibonacci.sh"
                 sh '''
-                    if [ -f "${WORKSPACE}/fibonacci.sh" ]; then
-                        echo "✓ Script fibonacci.sh trouvé"
-                        chmod +x "${WORKSPACE}/fibonacci.sh"
+                    if [ -f "${WORKSPACE}/scripts/fibonacci.sh" ]; then
+                        echo "✓ Script fibonacci.sh trouvé dans scripts/"
+                        chmod +x "${WORKSPACE}/scripts/fibonacci.sh"
                     else
-                        echo "✗ ERREUR: fibonacci.sh non trouvé dans ${WORKSPACE}"
+                        echo "✗ ERREUR: fibonacci.sh non trouvé dans ${WORKSPACE}/scripts/"
                         exit 1
                     fi
                 '''
@@ -64,7 +64,7 @@ pipeline {
             steps {
                 script {
                     echo "=== Début du calcul de Fibonacci ==="
-                    sh "${WORKSPACE}/fibonacci.sh ${params.N}"
+                    sh "${WORKSPACE}/scripts/fibonacci.sh ${params.N}"
                     echo "=== Fin du calcul ==="
                 }
             }
